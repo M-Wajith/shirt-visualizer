@@ -1,0 +1,11 @@
+# Stop tracking your current .env file in the repo (but keep it locally)
+git rm --cached .env
+
+# Stage the changes (including the new .gitignore)
+git add .gitignore
+
+# Commit the changes
+git commit -m "Add .env to .gitignore and remove from repo"
+
+# Push the changes to GitHub
+git push origin main
