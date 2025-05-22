@@ -10,7 +10,11 @@ const app = express();
 connectDB();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: '*', // or restrict to your frontend domain
+    methods: ['GET', 'POST'],
+    credentials: true
+  }));
 
 process.on('uncaughtException', (err) => {
     console.error('Uncaught Exception:', err);
