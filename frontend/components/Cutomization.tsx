@@ -37,11 +37,14 @@ const Customization = () => {
 
   const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
 
+  console.log("backend url",backendUrl)
+
   useEffect(() => {
     const fetchFabrics = async () => {
       try {
         const res = await fetch(`${backendUrl}/api/fabrics/images`);
         const data = await res.json();
+        console.log('Fabric image URLs:', data);
         setFabrics(data);
       } catch (error) {
         console.error('Error fetching fabrics:', error);
