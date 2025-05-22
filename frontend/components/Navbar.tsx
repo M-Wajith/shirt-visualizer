@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Signin from "./Signin";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("intro");
+  const [showsignin, setShowsignin] = useState(false); // State to toggle SignIn modal
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,6 +42,8 @@ const Navbar = () => {
     { id: "about", label: "About us" },
     { id: "contact", label: "Contact" },
   ];
+
+
 
   return (
     <header className="fixed top-0 left-0 w-full py-2 z-50 bg-white shadow-md">
@@ -92,7 +96,7 @@ const Navbar = () => {
             ))}
 
             {/* Mobile Sign In */}
-            <button className="py-2 px-4 text-sm font-medium rounded-xl border border-transparent bg-orange-600 text-black hover:bg-orange-700 transition lg:hidden">
+            <button className="py-2 px-4 text-sm font-medium rounded-xl border border-transparent bg-orange-600 text-white hover:bg-orange-700 transition lg:hidden" onClick={() => setShowsignin(true)}>
               Sign in
             </button>
           </div>
@@ -100,11 +104,13 @@ const Navbar = () => {
 
         {/* Desktop Sign In */}
         <div className="hidden lg:flex items-center ms-auto lg:ps-6 lg:order-3 lg:col-span-3">
-          <button className="py-2 px-4 text-sm font-medium rounded-xl border border-transparent bg-orange-600 text-white hover:bg-orange-700 transition">
+          <button className="py-2 px-4 text-sm font-medium rounded-xl border border-transparent bg-orange-600 text-white hover:bg-orange-700 transition" onClick={() => setShowsignin(true)}>
             Sign in
           </button>
         </div>
       </nav>
+      {/* Sign In Modal */}
+      {showsignin && <Signin setShowsignin={setShowsignin} />}
     </header>
   );
 };
