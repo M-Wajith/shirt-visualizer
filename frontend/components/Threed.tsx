@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import * as THREE from 'three';
 import { Canvas, useLoader } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
@@ -27,34 +27,28 @@ const Model = ({
   onCenterCalculated: (center: THREE.Vector3) => void;
 }) => {
   const gltf = useGLTF(modelPath);
-  const texture = fabricUrl ? useLoader(THREE.TextureLoader, fabricUrl) : null;
+  const placeholderUrl = '/shirtfy.png'; // Make sure this exists
+  const safeUrl = fabricUrl || placeholderUrl;
+  const texture = useLoader(THREE.TextureLoader, safeUrl);
 
   useEffect(() => {
-    if (!gltf || !gltf.scene) return;
+    if (!gltf?.scene) return;
 
     const scene = gltf.scene;
 
-    // Center and scale model
     const box = new THREE.Box3().setFromObject(scene);
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
-
     const maxAxis = Math.max(size.x, size.y, size.z);
     const scaleFactor = 1.5 / maxAxis;
 
     scene.scale.setScalar(scaleFactor);
-
-    // Center the model so it sits at origin
-    // Corrected positioning: subtract scaled center
-    scene.position.set(0, 0, 0); // reset position before calculation
+    scene.position.set(0, 0, 0);
     const adjustedCenter = center.clone().multiplyScalar(scaleFactor);
     scene.position.sub(adjustedCenter);
 
-    // Pass the adjusted center + offset so OrbitControls can target correctly
-    // For example, you might want the zoom target at torso height
-    const orbitTarget = new THREE.Vector3(0, 1, 0); // default target height (adjust if needed)
+    const orbitTarget = new THREE.Vector3(0, 1, 0);
     const finalTarget = scene.position.clone().add(orbitTarget);
-
     onCenterCalculated(finalTarget);
 
     scene.traverse((child) => {
@@ -66,13 +60,13 @@ const Model = ({
           material.color = new THREE.Color(0xfad7b3);
         }
 
-        if (mesh.name.toLowerCase().includes('shirt') && texture) {
+        if (mesh.name.toLowerCase().includes('shirt') && fabricUrl) {
           material.map = texture;
           material.needsUpdate = true;
         }
       }
     });
-  }, [gltf, texture, onCenterCalculated]);
+  }, [gltf, texture, fabricUrl, onCenterCalculated]);
 
   return <primitive object={gltf.scene} />;
 };
@@ -91,27 +85,24 @@ const Threed = ({ fabricUrl, selections }: ThreedProps) => {
 
   return (
     <Canvas camera={{ position: [0, 1.5, 2.3], fov: 45 }}>
-  <ambientLight intensity={0.8} />
-  <directionalLight position={[2, 3, 2]} intensity={0.5} />
-  <OrbitControls
-    target={orbitTarget.toArray()}
-    enableDamping
-    dampingFactor={0.1}
-    rotateSpeed={0.5}
-    minDistance={0.5}  // Allow closer zoom
-    maxDistance={6}
-  />
-  {modelPath && (
-    <Model
-      modelPath={modelPath}
-      fabricUrl={fabricUrl}
-      onCenterCalculated={setOrbitTarget}
-    />
-  )}
-</Canvas>
-
-
-
+      <ambientLight intensity={0.8} />
+      <directionalLight position={[2, 3, 2]} intensity={0.5} />
+      <OrbitControls
+        target={orbitTarget.toArray()}
+        enableDamping
+        dampingFactor={0.1}
+        rotateSpeed={0.5}
+        minDistance={0.5}
+        maxDistance={6}
+      />
+      {modelPath && (
+        <Model
+          modelPath={modelPath}
+          fabricUrl={fabricUrl}
+          onCenterCalculated={setOrbitTarget}
+        />
+      )}
+    </Canvas>
   );
 };
 
