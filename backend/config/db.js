@@ -5,10 +5,8 @@ const connectDB = async () => {
     // Use production URI if it exists, otherwise fallback to local URI
     const mongoURI = process.env.MONGODB_URI_PROD || process.env.MONGODB_URI;
 
-    await mongoose.connect(mongoURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(mongoURI);
+
     console.log('MongoDB Connected..');
   } catch (err) {
     console.error('MongoDB connection error: ', err);

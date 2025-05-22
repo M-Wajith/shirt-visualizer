@@ -20,3 +20,10 @@ app.listen(PORT, ()=> console.log(`Sever is running on port ${PORT}`))
 app.use('/api/users', userRoutes)
 
 app.use('/api/fabrics', fabricRoutes)
+
+
+process.on('unhandledRejection', err => {
+    console.error('Unhandled promise rejection:', err);
+    process.exit(1);
+  });
+  
