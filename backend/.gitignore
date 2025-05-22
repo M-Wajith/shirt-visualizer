@@ -1,11 +1,26 @@
-# Stop tracking your current .env file in the repo (but keep it locally)
-git rm --cached .env
+# backend/.gitignore
 
-# Stage the changes (including the new .gitignore)
-git add .gitignore
+# Ignore environment variables
+.env
 
-# Commit the changes
-git commit -m "Add .env to .gitignore and remove from repo"
+# Node modules
+node_modules/
 
-# Push the changes to GitHub
-git push origin main
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Build output
+dist/
+build/
+
+# Debugging files
+*.local
+
+# Optional: ignore coverage reports
+coverage/
