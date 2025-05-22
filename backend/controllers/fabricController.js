@@ -82,25 +82,31 @@ exports.getAllFabrics = async (req, res) => {
 //03. display all Fabric Images
 
 exports.getAllFabricsImages = async (req, res) => {
-    try {
-        const fabrics = await Fabric.find();
+  try {
+      const fabrics = await Fabric.find();
 
-        if (!fabrics || fabrics.length === 0) {
-            return res.status(404).send('No images found');
-        }
+      if (!fabrics || fabrics.length === 0) {
+          return res.status(404).send('No images found');
+      }
 
-        // Convert all images to base64 with content type
-        const images = fabrics.map(fabric => ({
-            fabric_id: fabric.fabric_id,
-            image: `data:${fabric.fabric_image.contentType};base64,${fabric.fabric_image.data.toString('base64')}`
-        }));
-        
-        res.status(200).json(images);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("Error retrieving images");
-    }
+      const images = fabrics.map(fabric => {
+          const base64Data = (fabric.fabric_image.data instanceof Buffer)
+              ? fabric.fabric_image.data.toString('base64')
+              : Buffer.from(fabric.fabric_image.data, 'base64').toString('base64');
+
+          return {
+              fabric_id: fabric.fabric_id,
+              image: `data:${fabric.fabric_image.contentType};base64,${base64Data}`
+          };
+      });
+
+      res.status(200).json(images);
+  } catch (err) {
+      console.error(err);
+      res.status(500).send("Error retrieving images");
+  }
 };
+
 //07 Get one fabric Image
 exports.getFabricImage = async (req, res) => {
     try {
