@@ -119,66 +119,69 @@ const Customization = () => {
             leave="transition ease-in duration-150"
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
-            className="absolute top-16 left-0 z-30 w-72 bg-white border border-gray-300 rounded-lg p-4 shadow-lg"
-            ref={settingsRef}
           >
+            <div
+              className="absolute top-16 left-0 z-30 w-72 bg-white border border-gray-300 rounded-lg p-4 shadow-lg"
+              ref={settingsRef}
+            >
 
-            <div className="grid grid-cols-1 gap-4">
-              {dropdowns.map(({ key, options, label }) => (
-                <div key={key} className="relative w-full">
-                  <label
-                    htmlFor={key}
-                    className="absolute -top-2 left-2 bg-white px-1 text-[11px] text-orange-500 font-medium z-10"
-                  >
-                    {label}
-                  </label>
+              <div className="grid grid-cols-1 gap-4">
+                {dropdowns.map(({ key, options, label }) => (
+                  <div key={key} className="relative w-full">
+                    <label
+                      htmlFor={key}
+                      className="absolute -top-2 left-2 bg-white px-1 text-[11px] text-orange-500 font-medium z-10"
+                    >
+                      {label}
+                    </label>
 
-                  <Listbox value={selections[key]} onChange={(value) => handleChange(key, value)}>
-                    {({ open }) => (
-                      <div>
-                        <Listbox.Button
-                          id={key}
-                          className="relative w-full cursor-default rounded-md bg-white border border-gray-300 py-2.5 pl-3 pr-8 text-left text-sm text-gray-900 shadow-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
-                        >
-                          <span className="block truncate capitalize">{selections[key]}</span>
-                          <span className="pointer-events-none absolute inset-y-0 right-2 flex items-center">
-                            <ChevronUpDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
-                          </span>
-                        </Listbox.Button>
+                    <Listbox value={selections[key]} onChange={(value) => handleChange(key, value)}>
+                      {({ open }) => (
+                        <div>
+                          <Listbox.Button
+                            id={key}
+                            className="relative w-full cursor-default rounded-md bg-white border border-gray-300 py-2.5 pl-3 pr-8 text-left text-sm text-gray-900 shadow-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+                          >
+                            <span className="block truncate capitalize">{selections[key]}</span>
+                            <span className="pointer-events-none absolute inset-y-0 right-2 flex items-center">
+                              <ChevronUpDownIcon className="h-4 w-4 text-gray-400" aria-hidden="true" />
+                            </span>
+                          </Listbox.Button>
 
-                        <Transition
-                          as={Fragment}
-                          leave="transition ease-in duration-100"
-                          leaveFrom="opacity-100"
-                          leaveTo="opacity-0"
-                        >
-                          <Listbox.Options className="absolute z-50 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white py-1 text-sm shadow-md ring-1 ring-orange ring-opacity-5 focus:outline-none">
-                            {options.map((opt) => (
-                              <Listbox.Option
-                                key={opt}
-                                className={({ active }) =>
-                                  `relative cursor-default select-none py-1.5 pl-3 pr-3 ${
-                                    active ? 'bg-orange-100 text-orange-900' : 'text-gray-900'
-                                  }`
-                                }
-                                value={opt}
-                              >
-                                <span
-                                  className={`block truncate capitalize ${
-                                    selections[key] === opt ? 'font-medium' : 'font-normal'
-                                  }`}
+                          <Transition
+                            as={Fragment}
+                            leave="transition ease-in duration-100"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                          >
+                            <Listbox.Options className="absolute z-50 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white py-1 text-sm shadow-md ring-1 ring-orange ring-opacity-5 focus:outline-none">
+                              {options.map((opt) => (
+                                <Listbox.Option
+                                  key={opt}
+                                  className={({ active }) =>
+                                    `relative cursor-default select-none py-1.5 pl-3 pr-3 ${
+                                      active ? 'bg-orange-100 text-orange-900' : 'text-gray-900'
+                                    }`
+                                  }
+                                  value={opt}
                                 >
-                                  {opt}
-                                </span>
-                              </Listbox.Option>
-                            ))}
-                          </Listbox.Options>
-                        </Transition>
-                      </div>
-                    )}
-                  </Listbox>
-                </div>
-              ))}
+                                  <span
+                                    className={`block truncate capitalize ${
+                                      selections[key] === opt ? 'font-medium' : 'font-normal'
+                                    }`}
+                                  >
+                                    {opt}
+                                  </span>
+                                </Listbox.Option>
+                              ))}
+                            </Listbox.Options>
+                          </Transition>
+                        </div>
+                      )}
+                    </Listbox>
+                  </div>
+                ))}
+              </div>
             </div>
           </Transition>
 
